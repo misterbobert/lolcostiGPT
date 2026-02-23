@@ -3,81 +3,554 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LoL Hub — Acasă</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>League of Legends — Fan Page</title>
+
+  <!-- Optional fonts (online). If offline, it will fall back nicely. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#02070e;
+      --bg1:#03121f;
+      --bg2:#0a2533;
+
+      --text:#e7e2d6;
+      --muted:rgba(231,226,214,.65);
+
+      --gold:#b48a2b;
+      --gold2:#d6b15a;
+      --cyan:#0fd3ff;
+
+      --line:rgba(214,177,90,.25);
+      --line2:rgba(255,255,255,.08);
+      --shadow: rgba(0,0,0,.55);
+
+      --serif: "Cinzel", ui-serif, Georgia, "Times New Roman", serif;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family:var(--sans);
+      background:
+        radial-gradient(1200px 600px at 50% 45%, rgba(15,211,255,.10), transparent 62%),
+        radial-gradient(900px 500px at 30% 30%, rgba(214,177,90,.08), transparent 60%),
+        radial-gradient(700px 420px at 70% 65%, rgba(180,138,43,.06), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+      overflow-x:hidden;
+    }
+
+    /* Optional: background image (place bg.jpg near this html) */
+    .bg-image{
+      position:fixed;
+      inset:-10%;
+      z-index:-2;
+      background:
+        radial-gradient(1200px 600px at 50% 45%, rgba(0,0,0,.35), rgba(0,0,0,.72) 65%, rgba(0,0,0,.85)),
+        /* Uncomment next line if you add an image:
+        url('bg.jpg') center/cover no-repeat,
+        */
+        linear-gradient(180deg, rgba(2,7,14,.75), rgba(2,7,14,.92));
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    .noise{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      opacity:.06;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    .wrap{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Top bar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background: rgba(2,7,14,.62);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line2);
+    }
+
+    .topbar-inner{
+      max-width:1200px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-family:var(--serif);
+      font-weight:700;
+      font-size:18px;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .logo .gold{ color:var(--gold2); text-shadow: 0 0 18px rgba(214,177,90,.10); }
+    .logo .cyan{ color:var(--cyan); }
+
+    nav{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-link{
+      color: rgba(231,226,214,.78);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:11px;
+      padding:10px 12px;
+      border-radius:0;
+      border:1px solid transparent;
+      transition: .18s ease;
+    }
+
+    .nav-link:hover{
+      color: var(--text);
+      border-color: rgba(214,177,90,.20);
+      background: rgba(180,138,43,.06);
+    }
+
+    .nav-link.active{
+      color: var(--text);
+      border-color: rgba(214,177,90,.35);
+      background: rgba(180,138,43,.08);
+      box-shadow: 0 0 0 1px rgba(214,177,90,.10) inset;
+    }
+
+    /* Hero area */
+    main{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 42px 18px 70px;
+    }
+
+    .hero{
+      width:100%;
+      max-width:980px;
+      text-align:center;
+      padding: 60px 14px 30px;
+      position:relative;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-30px -20px -40px -20px;
+      background:
+        radial-gradient(700px 380px at 50% 40%, rgba(15,211,255,.12), transparent 65%),
+        radial-gradient(650px 360px at 50% 40%, rgba(214,177,90,.06), transparent 65%);
+      filter: blur(0px);
+      opacity:.9;
+      z-index:-1;
+    }
+
+    .kicker{
+      color: rgba(15,211,255,.65);
+      font-size:11px;
+      letter-spacing:.42em;
+      text-transform:uppercase;
+      margin-bottom:16px;
+      user-select:none;
+    }
+
+    .title{
+      font-family:var(--serif);
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      line-height:1.05;
+      margin:0;
+      font-weight:600;
+      font-size: clamp(40px, 6vw, 74px);
+      text-shadow:
+        0 2px 0 rgba(0,0,0,.2),
+        0 18px 60px rgba(0,0,0,.35);
+    }
+
+    .title .accent{
+      color: var(--cyan);
+      text-shadow:
+        0 0 18px rgba(15,211,255,.10),
+        0 18px 60px rgba(0,0,0,.35);
+    }
+
+    .subtitle{
+      max-width:760px;
+      margin: 18px auto 24px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.75;
+      font-weight:500;
+    }
+
+    .buttons{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+
+    .btn{
+      cursor:pointer;
+      border-radius:0;
+      border:1px solid rgba(214,177,90,.28);
+      background: rgba(0,0,0,.12);
+      color: rgba(231,226,214,.85);
+      padding: 12px 18px;
+      font-size: 11px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      transition: .18s ease;
+      box-shadow: 0 14px 40px rgba(0,0,0,.22);
+      min-width: 220px;
+      text-align:center;
+      user-select:none;
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(214,177,90,.45);
+      color: var(--text);
+    }
+
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(214,177,90,.95), rgba(180,138,43,.92));
+      border-color: rgba(214,177,90,.65);
+      color: rgba(7,10,14,.95);
+      box-shadow:
+        0 18px 55px rgba(0,0,0,.35),
+        0 0 0 1px rgba(255,255,255,.08) inset;
+    }
+
+    .btn.primary:hover{
+      filter: brightness(1.03);
+      transform: translateY(-1px);
+    }
+
+    /* Sections (anchor targets) */
+    section{
+      max-width:1100px;
+      margin: 0 auto;
+      padding: 40px 18px 70px;
+    }
+
+    .panel{
+      border:1px solid var(--line2);
+      background: rgba(2,7,14,.58);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 22px 70px rgba(0,0,0,.35);
+      padding: 18px;
+    }
+
+    .panel h2{
+      margin: 0 0 10px;
+      font-family: var(--serif);
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-weight:600;
+      font-size: 22px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+      .btn{ min-width: 260px; width: 100%; max-width: 340px; }
+    }
+
+    .card{
+      border: 1px solid rgba(214,177,90,.15);
+      background: rgba(255,255,255,.03);
+      padding: 14px;
+    }
+
+    .card h3{
+      margin: 0 0 6px;
+      font-size: 13px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color: rgba(231,226,214,.9);
+    }
+
+    .card p{
+      margin:0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .imgbox{
+      width:100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(500px 240px at 50% 40%, rgba(15,211,255,.10), transparent 62%),
+        rgba(0,0,0,.25);
+      overflow:hidden;
+      margin-top: 10px;
+    }
+    .imgbox img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(1.05) contrast(1.05);
+    }
+
+    footer{
+      text-align:center;
+      color: rgba(231,226,214,.55);
+      border-top: 1px solid var(--line2);
+      padding: 18px;
+      font-size: 12px;
+      letter-spacing:.06em;
+    }
+
+    /* Smooth scrolling */
+    html{ scroll-behavior:smooth; }
+  </style>
 </head>
+
 <body>
-  <header class="nav">
-    <div class="container nav-inner">
-      <div class="brand">
-        <span>LoL Hub</span>
-        <span class="badge">fan site</span>
-      </div>
-      <nav class="links">
-        <a href="index.html">Acasă</a>
-        <a href="champions.html">Campioni</a>
-        <a href="roles.html">Roluri</a>
-        <a href="esports.html">Esports</a>
-        <a href="gallery.html">Galerie</a>
-      </nav>
-    </div>
-  </header>
+  <div class="bg-image" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
 
-  <main class="container">
-    <section class="hero">
-      <div class="card">
-        <h1 class="title">League of Legends, pe scurt.</h1>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="logo" title="League of Legends (fan site)">
+          <span class="gold">League of</span>
+          <span class="cyan">Legends</span>
+        </div>
+
+        <nav aria-label="Meniu principal">
+          <a class="nav-link" href="#acasa" data-route="acasa">Acasă</a>
+          <a class="nav-link" href="#campioni" data-route="campioni">Campioni</a>
+          <a class="nav-link" href="#galerie" data-route="galerie">Galerie</a>
+          <a class="nav-link" href="#poveste" data-route="poveste">Poveste</a>
+          <a class="nav-link" href="#ranguri" data-route="ranguri">Ranguri</a>
+          <a class="nav-link" href="#contact" data-route="contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="acasa">
+      <div class="hero">
+        <div class="kicker">BINE AI VENIT ÎN RUNETERRA</div>
+
+        <h1 class="title">
+          INTRĂ ÎN <span class="accent">BĂTĂLIE</span><br/>
+          DEVINO LEGENDĂ
+        </h1>
+
         <p class="subtitle">
-          Un mini-site cu pagini despre campioni, roluri, esports și o galerie cu poze.
-          Poți schimba textele și imaginile cum vrei.
+          League of Legends este unul dintre cele mai jucate jocuri din lume. Alege-ți campionul,
+          cucerește Summoner’s Rift și scrie-ți propria poveste.
         </p>
-        <div class="btns">
-          <a class="btn primary" href="champions.html">Vezi campioni</a>
-          <a class="btn" href="gallery.html">Intră în galerie</a>
-        </div>
 
-        <div class="section">
-          <h2>Quick facts</h2>
-          <div class="kpis">
-            <div class="kpi"><b>5 pagini</b><span>minim, deja incluse</span></div>
-            <div class="kpi"><b>Imagini</b><span>în folderul <code>images/</code></span></div>
-            <div class="kpi"><b>Ușor de editat</b><span>HTML + CSS + JS</span></div>
-          </div>
-          <p class="notice">
-            Notă: Site neoficial, făcut pentru proiect/învățare. Nu este afiliat Riot Games.
-          </p>
+        <div class="buttons">
+          <a class="btn primary" href="#campioni">EXPLOREAZĂ CAMPIONII</a>
+          <a class="btn" href="#poveste">DESCOPERĂ LUMEA</a>
         </div>
       </div>
+    </main>
 
-      <div class="card">
-        <div class="media">
-          <img src="images/hero.jpg" alt="LoL hero" />
+    <section id="campioni">
+      <div class="panel">
+        <h2>Campioni</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Assassin</h3>
+            <p>Damage exploziv, pick rapid, intri-ieși din fight.</p>
+            <div class="imgbox">
+              <!-- pune tu poza: images/assassin.jpg -->
+              <img src="" alt="" onerror="this.remove()" />
+            </div>
+          </div>
+          <div class="card">
+            <h3>Mage</h3>
+            <p>Control, burst, poke, zonare în teamfight.</p>
+            <div class="imgbox">
+              <!-- pune tu poza: images/mage.jpg -->
+              <img src="" alt="" onerror="this.remove()" />
+            </div>
+          </div>
+          <div class="card">
+            <h3>Tank</h3>
+            <p>Inițiere, front line, protecție pentru echipă.</p>
+            <div class="imgbox">
+              <!-- pune tu poza: images/tank.jpg -->
+              <img src="" alt="" onerror="this.remove()" />
+            </div>
+          </div>
         </div>
-        <div class="section">
-          <h2>Ce găsești aici?</h2>
-          <div class="grid">
-            <div class="item">
-              <h3>Campioni</h3>
-              <p>Descrieri scurte + exemple de stiluri.</p>
+        <p style="margin:14px 0 0;color:var(--muted);font-size:12px;line-height:1.7">
+          Tip: pune poze în același folder, ex: <b>images/ahri.jpg</b> și schimbă <code>src</code> la
+          <code>src="images/ahri.jpg"</code>.
+        </p>
+      </div>
+    </section>
+
+    <section id="galerie">
+      <div class="panel">
+        <h2>Galerie</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Wallpaper 1</h3>
+            <p>Adaugă imagine: <code>images/gallery1.jpg</code></p>
+            <div class="imgbox">
+              <img src="images/gallery1.jpg" alt="Wallpaper 1" onerror="this.remove()" />
             </div>
-            <div class="item">
-              <h3>Roluri</h3>
-              <p>Top/Jungle/Mid/ADC/Support pe scurt.</p>
+          </div>
+          <div class="card">
+            <h3>Wallpaper 2</h3>
+            <p>Adaugă imagine: <code>images/gallery2.jpg</code></p>
+            <div class="imgbox">
+              <img src="images/gallery2.jpg" alt="Wallpaper 2" onerror="this.remove()" />
             </div>
-            <div class="item">
-              <h3>Esports</h3>
-              <p>Ce înseamnă competițiile și ce urmărești.</p>
+          </div>
+          <div class="card">
+            <h3>Wallpaper 3</h3>
+            <p>Adaugă imagine: <code>images/gallery3.jpg</code></p>
+            <div class="imgbox">
+              <img src="images/gallery3.jpg" alt="Wallpaper 3" onerror="this.remove()" />
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <footer class="footer">
-      © LoL Hub — proiect demo • făcut în HTML/CSS/JS
-    </footer>
-  </main>
+    <section id="poveste">
+      <div class="panel">
+        <h2>Poveste</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Runeterra</h3>
+            <p>Mai multe regiuni, fiecare cu stilul ei: magie, tehnologie, umbre, legende.</p>
+          </div>
+          <div class="card">
+            <h3>Regiuni</h3>
+            <p>Demacia • Noxus • Ionia • Piltover &amp; Zaun • Freljord • Shurima etc.</p>
+          </div>
+          <div class="card">
+            <h3>Legendă</h3>
+            <p>Scrie aici lore-ul tău preferat sau un rezumat pentru un campion.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <script src="app.js"></script>
+    <section id="ranguri">
+      <div class="panel">
+        <h2>Ranguri</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Stil competitiv</h3>
+            <p>Adaugă explicații despre LP, promoții, MMR, cum urci în rank.</p>
+          </div>
+          <div class="card">
+            <h3>Obiectiv</h3>
+            <p>Ex: “Ținta mea e Gold” + plan: 3 meciuri/zi, review, champion pool fix.</p>
+          </div>
+          <div class="card">
+            <h3>Tips</h3>
+            <p>Farm constant, vision, timing pe obiective, play around spikes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="panel">
+        <h2>Contact</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Formular</h3>
+            <p>
+              <label style="display:block;margin-top:10px;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;">Nume</label>
+              <input style="width:100%;padding:10px;border:1px solid var(--line2);background:rgba(0,0,0,.18);color:var(--text);outline:none" placeholder="Numele tău">
+              <label style="display:block;margin-top:10px;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;">Mesaj</label>
+              <textarea rows="4" style="width:100%;padding:10px;border:1px solid var(--line2);background:rgba(0,0,0,.18);color:var(--text);outline:none" placeholder="Scrie aici..."></textarea>
+              <button class="btn primary" style="margin-top:12px;min-width:unset;width:100%" type="button" onclick="alert('Demo: aici ai trimite mesajul.');">
+                TRIMITE
+              </button>
+            </p>
+          </div>
+          <div class="card">
+            <h3>Info</h3>
+            <p>Discord / Instagram / etc. (completezi tu).</p>
+          </div>
+          <div class="card">
+            <h3>Notă</h3>
+            <p>Site neoficial, făcut pentru proiect/învățare. Nu este afiliat Riot Games.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © LoL Fan Site — Single-file HTML • făcut în HTML/CSS/JS
+    </footer>
+  </div>
+
+  <script>
+    // Highlight active menu item by current hash + smooth update on scroll
+    const links = Array.from(document.querySelectorAll(".nav-link"));
+    const sections = links
+      .map(a => document.querySelector(a.getAttribute("href")))
+      .filter(Boolean);
+
+    function setActiveByHash(){
+      const h = (location.hash || "#acasa").toLowerCase();
+      links.forEach(a => a.classList.toggle("active", a.getAttribute("href").toLowerCase() === h));
+    }
+    window.addEventListener("hashchange", setActiveByHash);
+    setActiveByHash();
+
+    // Optional: active link while scrolling (simple observer)
+    const obs = new IntersectionObserver((entries)=>{
+      const visible = entries
+        .filter(e=>e.isIntersecting)
+        .sort((a,b)=>b.intersectionRatio - a.intersectionRatio)[0];
+      if(!visible) return;
+      const id = "#" + visible.target.id;
+      links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === id));
+      history.replaceState(null, "", id);
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: [0.05, 0.12, 0.2] });
+
+    sections.forEach(s => obs.observe(s));
+  </script>
 </body>
 </html>
